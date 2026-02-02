@@ -31,7 +31,9 @@ function TaskForm({
     e.preventDefault();
     const form = e.currentTarget;
     
-    if (form.checkValidity() === false) {
+    const isTitleValid = formData.title.trim().length >= 3;
+    
+    if (form.checkValidity() === false || !isTitleValid) {
       e.stopPropagation();
       setValidated(true);
       return;
@@ -88,12 +90,16 @@ function TaskForm({
               onChange={handleChange}
               placeholder="¿Qué necesitas hacer?"
               required
+              minLength={3}
               disabled={loading}
               className="py-2"
               autoFocus
+              isInvalid={validated && formData.title.trim().length < 3}
             />
             <Form.Control.Feedback type="invalid">
-              El título es obligatorio
+              {formData.title.trim().length === 0 
+                ? 'El título es obligatorio' 
+                : 'El título debe tener al menos 3 caracteres'}
             </Form.Control.Feedback>
           </Form.Group>
 
